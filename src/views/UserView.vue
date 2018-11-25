@@ -5,7 +5,10 @@
       <ul class="meta">
         <li><span class="label">Created:</span> {{ user.created | timeAgo }} ago</li>
         <li><span class="label">Karma:</span> {{ user.karma }}</li>
-        <li v-if="user.about" v-html="user.about" class="about"></li>
+        <li 
+          v-if="user.about" 
+          class="about" 
+          v-html="user.about"/>
       </ul>
       <p class="links">
         <a :href="'https://news.ycombinator.com/submitted?id=' + user.id">submissions</a> |
@@ -21,23 +24,23 @@
 <script>
 
 export default {
-  name: 'user-view',
+    name: 'UserView',
 
-  computed: {
-    user () {
-      return this.$store.state.users[this.$route.params.id]
+    computed: {
+        user() {
+            return this.$store.state.users[this.$route.params.id]
+        }
+    },
+
+    asyncData({store, route: {params: {id}}}) {
+        return store.dispatch('FETCH_USER', {id})
+    },
+
+    title() {
+        return this.user
+            ? this.user.id
+            : 'User not found'
     }
-  },
-
-  asyncData ({ store, route: { params: { id }}}) {
-    return store.dispatch('FETCH_USER', { id })
-  },
-
-  title () {
-    return this.user
-      ? this.user.id
-      : 'User not found'
-  }
 }
 </script>
 

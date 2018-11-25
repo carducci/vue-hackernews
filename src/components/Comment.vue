@@ -1,40 +1,56 @@
 <template>
-  <li v-if="comment" class="comment">
+  <li 
+    v-if="comment" 
+    class="comment">
     <div class="by">
       <router-link :to="'/user/' + comment.by">{{ comment.by }}</router-link>
       {{ comment.time | timeAgo }} ago
     </div>
-    <div class="text" v-html="comment.text"></div>
-    <div class="toggle" :class="{ open }" v-if="comment.kids && comment.kids.length">
+    <div 
+      class="text" 
+      v-html="comment.text"/>
+    <div 
+      v-if="comment.kids && comment.kids.length" 
+      :class="{ open }" 
+      class="toggle">
       <a @click="open = !open">{{
         open
-            ? '[-]'
-            : '[+] ' + pluralize(comment.kids.length) + ' collapsed'
+          ? '[-]'
+          : '[+] ' + pluralize(comment.kids.length) + ' collapsed'
       }}</a>
     </div>
-    <ul class="comment-children" v-show="open">
-      <comment v-for="id in comment.kids" :key="id" :id="id"></comment>
+    <ul 
+      v-show="open" 
+      class="comment-children">
+      <comment 
+        v-for="id in comment.kids" 
+        :key="id" 
+        :id="id"/>
     </ul>
   </li>
 </template>
 
 <script>
 export default {
-  name: 'comment',
-  props: ['id'],
-  data () {
-    return {
-      open: true
+    name: 'Comment',
+    props: {
+        id: {
+            type:Number
+        }
+    },
+    data() {
+        return {
+            open: true
+        }
+    },
+    computed: {
+        comment() {
+            return this.$store.state.items[this.id]
+        }
+    },
+    methods: {
+        pluralize: n => n + (n === 1 ? ' reply' : ' replies')
     }
-  },
-  computed: {
-    comment () {
-      return this.$store.state.items[this.id]
-    }
-  },
-  methods: {
-    pluralize: n => n + (n === 1 ? ' reply' : ' replies')
-  }
 }
 </script>
 
