@@ -11,7 +11,8 @@
     "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.server.config.js --progress --hide-modules",
     "lint": "vue-cli-service lint",
     "test": "npm run lint && npm run test:unit",
-    "test:unit": "jest"
+    "test:unit": "jest",
+    "test:unit:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --no-cache --runInBand"
   },
   "engines": {
     "node": ">=7.0",
